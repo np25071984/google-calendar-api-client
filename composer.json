@@ -1,0 +1,25 @@
+{
+    "name": "np25071984/google-calendar-api-client",
+    "description": "Google Calendar API Client Library",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Nikolai Poriadin",
+            "email": "np25071984@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.15.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "np25071984\\GoogleCalendarClient\\": "src/"
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google/apiclient-services": ["Calendar"]
+    }
+}
