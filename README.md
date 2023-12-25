@@ -4,11 +4,12 @@ This library allows to query Google Calendar events for given time period with S
 
 ## How to use
 
-1. Create Google project
-2. Enable Google Calendar API
-3. Create Service Account
-4. Share your calendar with the Service Account email
-5. Use the library to query events
+1. Create a Google Cloud project [link](https://developers.google.com/workspace/guides/create-project)
+2. Enable Google Calendar API [link](https://developers.google.com/workspace/guides/enable-apis#google-cloud-console)
+3. Create a Service Account [link](https://developers.google.com/workspace/guides/create-credentials#create_a_service_account)
+4. Download credentials for the service account [link](https://developers.google.com/workspace/guides/create-credentials#create_credentials_for_a_service_account)
+5. Share your calendar with the Service Account email [link](https://support.google.com/calendar/answer/37082?hl=en)
+6. Use the library to query events
 
 ### Get list of events
 
@@ -29,25 +30,29 @@ $eventDateTime = new EventDateTime(
 );
 list($syncToken, $events) = $calendar->getEvents($calendarId, $eventDateTime);
 
-/** @var Array<Event|Task|Cancellation> $events */
+/** @var Array<CalendarEventAbstract> $events */
 foreach ($events as $event) {
     echo $event->getId(), PHP_EOL;
 
-    switch (true) {
-        case $event instanceof Cancellation:
+    switch ($event->getType()) {
+        case EventTypeEnum::Cancellation:
             echo "Cancellation", PHP_EOL;
             break;
-        case $event instanceof Task:
+        case EventTypeEnum::Task:
             echo "Task", PHP_EOL;
             echo $event->getSummary(), PHP_EOL;
             echo $event->getEventDatetime()->getStartDate()->format("Y-m-d"), PHP_EOL;
             echo $event->getEventDatetime()->getEndDate()->format("Y-m-d"), PHP_EOL;
             break;
-        case $event instanceof Event:
+        case EventTypeEnum::Event:
             echo "Event", PHP_EOL;
             echo $event->getSummary(), PHP_EOL;
             echo $event->getEventDatetime()->getStartDate()->format("Y-m-d H:m:s"), PHP_EOL;
             echo $event->getEventDatetime()->getEndDate()->format("Y-m-d H:m:s"), PHP_EOL;
+            foreach ($event->getAttendees() as $attendee) {
+                echo $attendee, PHP_EOL;
+            }
+            echo $event->getLocation(), PHP_EOL;
             break;
         default:
             throw new Exception("Unknown event type");

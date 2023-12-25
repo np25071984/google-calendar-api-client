@@ -40,7 +40,6 @@ class Calendar {
             'singleEvents' => true,
             'timeMin' => $eventDateTime->getStartDate()->format(DateTime::RFC3339),
             'timeMax' => $eventDateTime->getEndDate()->format(DateTime::RFC3339),
-            // 'syncToken' => "CKDhxqvEo4MDEKDhxqvEo4MDGAEgvLaUmgIovLaUmgI=",
         );
 
         do {
@@ -90,10 +89,17 @@ class Calendar {
 
                         $eventDateTime = new EventDateTime($start, $end);
 
+                        $attendees = [];
+                        foreach($event['attendees'] as $attendee) {
+                            $attendees[] = $attendee->displayName ?: $attendee->email;
+                        }
+
                         $events[] = new Event(
                             $event->getId(),
                             $event->getSummary(),
                             $eventDateTime,
+                            $attendees,
+                            $event->getLocation(),
                         );
 
                     } else {
@@ -182,10 +188,17 @@ class Calendar {
 
                         $eventDateTime = new EventDateTime($start, $end);
 
+                        $attendees = [];
+                        foreach($event['attendees'] as $attendee) {
+                            $attendees[] = $attendee->displayName ?: $attendee->email;
+                        }
+
                         $events[] = new Event(
                             $event->getId(),
                             $event->getSummary(),
                             $eventDateTime,
+                            $attendees,
+                            $event->getLocation(),
                         );
                     } else {
                         $start = DateTimeImmutable::createFromFormat(

@@ -5,31 +5,34 @@ declare(strict_types = 1);
 namespace np25071984\GoogleCalendarClient\Events;
 
 use np25071984\GoogleCalendarClient\EventDateTime;
+use np25071984\GoogleCalendarClient\EventTypeEnum;
 
-class Event {
-    private string $id;
-    private string $summary;
-    private EventDateTime $eventDateTime;
+class Event extends Task {
+    /** @var Array<string> $attendees */
+    private array $attendees;
+    private ?string $location;
 
     function __construct(
         string $id,
         string $summary,
         EventDateTime $eventDateTime,
+        array $attendees,
+        ?string $location,
     ) {
-        $this->id = $id;
-        $this->summary = $summary;
-        $this->eventDateTime = $eventDateTime;
+        parent::__construct($id, $summary, $eventDateTime);
+        $this->attendees = $attendees;
+        $this->location = $location;
     }
 
-    function getId(): string {
-        return $this->id;
+    function getType(): EventTypeEnum {
+        return EventTypeEnum::Event;
     }
 
-    function getSummary(): string {
-        return $this->summary;
+    function getAttendees(): array {
+        return $this->attendees;
     }
 
-    function getEventDatetime(): EventDateTime {
-        return $this->eventDateTime;
+    function getLocation(): ?string {
+        return $this->location;
     }
 }
